@@ -40,5 +40,41 @@ keymap.set("n", "<leader>sh", "<C-w>s") -- 垂直新增窗口 split horizontal
 -- visual 模式选中 代码块后 按住 ctrl 再 jk 把它直接上下移动
 -- ctrl 能从 目录区域放到 代码区域, shift 切换当前的代码区域里的这些标签页, <leader> b d 关闭当前缓冲区(就是当前在看的标签页) buffer delete
 
+-- ----------------------------- 终端切换（覆盖 LazyVim 默认） ------------------------------ --
+-- 用法:
+--   {n}<C-/>   → 切换/固定终端 #n（如 2<C-/> 固定到终端 #2）
+--   <C-/>      → 如果在终端窗口中就隐藏它，再按切回同个终端
+local last_terminal_count = 1
+local function smart_terminal()
+  local count = vim.v.count
+  if count > 0 then
+    -- 用户指定了编号：切到该终端，并记住它
+    last_terminal_count = count
+    Snacks.terminal(nil, { cwd = LazyVim.root(), count = count })
+    return
+  end
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.bo[buf].filetype == "snacks_terminal" then
+    -- 在终端里：查出当前是几号，记住它，然后隐藏
+    local meta = vim.b[buf].snacks_terminal or {}
+    if meta.id then
+      last_terminal_count = meta.id
+    end
+    for _, t in ipairs(Snacks.terminal.list()) do
+      if t.buf == buf then
+        t:hide()
+        return
+      end
+    end
+  end
+  -- 不在终端里：切到上次使用的终端
+  Snacks.terminal(nil, { cwd = LazyVim.root(), count = last_terminal_count })
+end
+-- 注意: <C-/> 和 <C-_> 是同一个键码（ASCII 0x1F），只注册一个即可
+-- 先删掉 LazyVim 默认 mapping 确保我们的生效
+pcall(vim.keymap.del, "n", "<c-_>")
+pcall(vim.keymap.del, "t", "<c-_>")
+vim.keymap.set({ "n", "t" }, "<c-/>", smart_terminal, { desc = "Terminal (Smart Toggle)" })
+
 -- ----------------------------- Python ------------------------------ --
 -- -- molten
