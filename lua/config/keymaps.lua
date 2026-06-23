@@ -75,6 +75,8 @@ end
 pcall(vim.keymap.del, "n", "<c-_>")
 pcall(vim.keymap.del, "t", "<c-_>")
 vim.keymap.set({ "n", "t" }, "<c-/>", smart_terminal, { desc = "Terminal (Smart Toggle)" })
+-- tmux 里 Ctrl+/ 收不到时的兜底方案
+vim.keymap.set({ "n", "t" }, "<leader>tt", smart_terminal, { desc = "Terminal (Fallback)" })
 
 -- ----------------------------- Python ------------------------------ --
 -- -- molten
