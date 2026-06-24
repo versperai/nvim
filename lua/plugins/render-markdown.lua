@@ -1,9 +1,14 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suitev
-  -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
-  -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+  dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
-  opts = {},
+  opts = {
+    -- 支持 quarto (.qmd) 文件
+    file_types = { "markdown", "quarto" },
+    -- 启用数学公式渲染（$...$ / $$...$$）
+    latex = {
+      enabled = true,
+    },
+  },
 }
