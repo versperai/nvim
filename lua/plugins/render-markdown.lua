@@ -3,10 +3,9 @@ return {
   dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
+  ft = { "markdown", "quarto", "rmd" },
   opts = {
-    -- 支持 quarto (.qmd) 文件
     file_types = { "markdown", "quarto" },
-    -- 启用数学公式渲染（$...$ / $$...$$）
     latex = {
       enabled = true,
     },

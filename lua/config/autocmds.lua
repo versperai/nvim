@@ -13,11 +13,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = false
   end,
 })
-
--- 识别 .qmd 文件为 quarto 类型
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.qmd",
-  callback = function()
-    vim.bo.filetype = "quarto"
-  end,
-})
